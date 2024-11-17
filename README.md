@@ -83,6 +83,8 @@ touch .eslintrc.json
 * `quotes`: Define o estilo de aspas. Neste caso, está configurado para aspas simples.
 * `semi`: Define o uso de ponto e vírgula. Neste caso, está configurado para sempre usar ponto e vírgula.
 
+**Obs.:** Nesse projeto estou usando o ESLint da Rocketseat, que já vem com algumas regras pré-definidas.
+
 ### Configurando o VScode para o ESLint
 * instalar a extensão ESLint
 * Adicionar a seguinte configuração no `settings.json`
@@ -96,4 +98,31 @@ touch .eslintrc.json
 "scripts": {
     "lint": "eslint . --ext .t --fix"
 }
+```
+
+## 3. Configurando o Query Builder
+
+Para um projeto de aprendizado um query builder é uma ferramenta muito boa. ORMs são mais complexos e para um projeto pequeno um query builder é mais do que suficiente.
+
+* Instalando o Knex e o driver do SQLite
+```bash
+npm install knex sqlite3
+```
+
+* Criar o arquivo de configuração do Knex
+```bash
+npx knex init
+```
+
+* Criadno o arquivo de configuração knex na mão, usando typescript
+Crie um arquivo database.ts na pasta src
+```typescript
+import { knex as setupKnex } from 'knex'
+
+export const knex = setupKnex({
+  client: 'sqlite3',
+  connection: {
+    filename: ',/temp/app.db',
+  },
+})
 ```
