@@ -114,15 +114,72 @@ npm install knex sqlite3
 npx knex init
 ```
 
-* Criadno o arquivo de configuração knex na mão, usando typescript
-Crie um arquivo database.ts na pasta src
+* Criando o arquivo de configuração knex na mão, usando typescript
+Crie um arquivo database.ts na pasta config
 ```typescript
-import { knex as setupKnex } from 'knex'
+import { knex as setupKnex, Knex } from 'knex'
 
-export const knex = setupKnex({
+export const config: Knex.Config = {
   client: 'sqlite3',
   connection: {
-    filename: ',/temp/app.db',
+    filename: './temp/app.db',
   },
-})
+  useNullAsDefault: true,
+  migrations: {
+    directory: './src/migrations',
+  },
+}
+
+export const knex = setupKnex(config)
+```
+
+## 4. Criadno as migrations
+Como o knex foi construído para trabalhar com javascropt e nosso projeto é em typescript precisamos fazer algumas configurações para o knex entender o typescript.
+* Crie um arquivo `knexfilets` na raiz do projeto
+```typescript
+import { config } from './src/database'
+
+export default config
+```
+* Crie o seguinte script que irá conseguir executar o knex com o typescript
+```json
+"knex": "node --import tsx ./node_modules/.bin/knex"
+```
+    * em versões mais antigas usava-se `--loader`
+
+para passar parâmetros para o knex é necessário passar o comando `--` antes dos parâmetros
+```bash
+npm run knex -- -h
+```
+* Criar uma migration
+O nome da migration deve ser descritivo para facilitar o entendimento de quem for ler o código.
+```bash
+npm run knex -- migrate:make nome_da_migration
+```
+* Estrutura de uma migration tem dois métodos `up` e `down`. O método `up` é responsável para a alteração no banco de dados e o método `down` reverte essa alteração.
+```typescript
+import { Knex } from 'knex'
+
+export async function up(knex: Knex): Promise<void> {
+  await knex.schema.createTable('exemplo', (table) => {
+    table.uuid('id').primary()
+    table.text('title').notNullable()
+  })
+}
+
+export async function down(knex: Knex): Promise<void> {
+  await knex.schema.dropTable('exemplo')
+}
+```
+* Executando a migration
+```bash
+npm run knex -- migrate:latest
+```
+
+    **IMPORTANTE**: sempre que uma migration for subida para time NUMCA deve ser modificada, caso seja necessário fazer alguma alteração crie uma nova migration.
+
+* Desfazendo a migration
+Caso eu não tenha subido para o time, posso desfazer a migration usando o comadno a seguir.
+```bash
+npm run knex -- migrate:rollback
 ```
