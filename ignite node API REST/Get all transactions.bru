@@ -1,0 +1,19 @@
+meta {
+  name: Get all transactions
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3333/transactions
+  body: none
+  auth: none
+}
+
+body:json {
+  {
+    "title": "teste via ferramenta",
+    "amount": 5000,
+    "type": "credit"
+  }
+}

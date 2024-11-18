@@ -6,7 +6,9 @@ const app = fastify()
 
 const port = env.PORT
 
-app.register(transactionController)
+app.register(transactionController, {
+  prefix: '/transactions',
+})
 
 app.listen({ port }, (err, address) => {
   if (err) {
