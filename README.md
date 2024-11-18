@@ -116,8 +116,7 @@ npx knex init
 
 * Criando o arquivo de configuração knex na mão, usando typescript
 Crie um arquivo database.ts na pasta config
-```typescript
-import { knex as setupKnex, Knex } from 'knex'
+```typescriimport { knex as setupKnex, Knex } from 'knex'
 
 export const config: Knex.Config = {
   client: 'sqlite3',
@@ -130,7 +129,7 @@ export const config: Knex.Config = {
   },
 }
 
-export const knex = setupKnex(config)
+export const knex = setupKnex(config)ig)
 ```
 
 ## 4. Criadno as migrations
@@ -182,4 +181,59 @@ npm run knex -- migrate:latest
 Caso eu não tenha subido para o time, posso desfazer a migration usando o comadno a seguir.
 ```bash
 npm run knex -- migrate:rollback
+```
+
+## 5. Realizando querys com o knex
+* Fazer um `insert`
+
+```typescript
+await knex('transactions')
+    .insert({
+      id: crypto.randomUUID(),
+      title: 'Transaction test',
+      amount: 1000,
+    })
+    .returning('*')
+```
+O `.returning('*')` faz com que após inserir o valor retorne o que foi inserido.
+
+* Fazer uma consulta (`select`)
+seleção de todos os registros
+```typescript
+const transaction = await knex('transactions').select('*')
+```
+seleção de registros com condição
+```typescript
+await knex('transactions')
+    .where('amount', 500)
+    .select('*')
+```
+Existe N possibilidades de fazer consultas com o knex, para saber mais consulte a [documentação](http://knexjs.org/)
+
+## 6. Variáveis de ambiente
+Em um projeto real é necessário ter variáveis de ambiente para proteger informações sensíveis como senhas, tokens, etc.
+* Criar um arquivo `.env` na raiz do projeto
+```env
+DB_CLIENT="sqlite3"
+DB_URL="./temp/app.db"
+PORT="3333"
+```
+* Instale a extensão `dotenv` no vscode
+    Isso fará o vscode enteder as variáveis de ambiente e não mostrará erros no código.
+* Instale o pacote `dotenv`
+```bash
+npm install dotenv
+```
+* Usando o `env`
+Para usar o `env` basta importar `dotenv/config` e usar a variável global `process.env`
+```typescript
+import 'dotenv/config'
+
+const port = process.env.PORT
+```
+* Crie um arquivo `.env.example` para mostrar quais variáveis de ambiente são necessárias para o projeto
+```env
+DB_CLIENT=
+DB_URL=
+PORT=
 ```

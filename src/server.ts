@@ -1,15 +1,20 @@
+import 'dotenv/config'
 import fastify from 'fastify'
 import { knex } from '../config/database'
 
 const app = fastify()
 
-app.get('/', async () => {
-  const tables = await knex('sqlite_schema').select('*')
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000
 
-  return tables
+app.get('/', async () => {
+  const transaction = await knex('transactions')
+    .where('amount', 500)
+    .select('*')
+
+  return transaction
 })
 
-app.listen({ port: 3000 }, (err, address) => {
+app.listen({ port }, (err, address) => {
   if (err) {
     console.error(err)
     process.exit(1)
