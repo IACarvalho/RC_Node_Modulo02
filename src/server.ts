@@ -1,10 +1,10 @@
-import 'dotenv/config'
 import fastify from 'fastify'
 import { knex } from '../config/database'
+import { env } from './env'
 
 const app = fastify()
 
-const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000
+const port = env.PORT
 
 app.get('/', async () => {
   const transaction = await knex('transactions')
