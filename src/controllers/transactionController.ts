@@ -22,8 +22,25 @@ export async function transactionController(app: FastifyInstance) {
     reply.status(201).send()
   })
 
-  app.get('/', async (request, reply) => {
+  app.get('/', async (_, reply) => {
     const transactions = await knex('transactions').select('*')
-    reply.send(transactions)
+    reply.status(200).send({ transactions })
+  })
+
+  app.get('/:id', async (request, reply) => {
+    const getTransactionParamsSchema = z.object({
+      id: z.string().uuid(),
+    })
+
+    const { id } = getTransactionParamsSchema.parse(request.params)
+
+    const transaction = await knex('transactions').where('id', id).first() // usar o first evita que retorne um array
+
+    if (!transaction) {
+      reply.status(404).send()
+      return
+    }
+
+    return reply.status(200).send({ transaction })
   })
 }
