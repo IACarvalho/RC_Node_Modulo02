@@ -272,3 +272,13 @@ const app = fastify()
 app.register(exemplo)
 ```
 A ordem dos plugins no código é a ordem emq ue são executados, então caso necessite que um seja executado antes coloqueo na frente.
+
+## 9. Cookies
+Cookies sáo informações que ficam guardadas no navegador do usuário.
+Muitos sites salvam um id no navegador para garantir que o usuário que está fazendo as requisições é o mesmo.
+Cookies såo craidos e enviados por requisições HTTP. Ótimo método para validar informações do usuário.
+
+* instale o pacote `fastify-cookie`
+```bash
+npm i @fastify/cookie
+```
