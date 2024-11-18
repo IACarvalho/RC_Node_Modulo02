@@ -261,3 +261,14 @@ if (!_env.success) {
 
 export const env = _env.data
 ```
+
+## 8. Plugins do fastify
+Para usar plugins no fastify basta importar o plugin e usar o método `register` do fastify.
+```typescript
+import fastify from 'fastify'
+import { exemplo } from './src'
+
+const app = fastify()
+app.register(exemplo)
+```
+A ordem dos plugins no código é a ordem emq ue são executados, então caso necessite que um seja executado antes coloqueo na frente.

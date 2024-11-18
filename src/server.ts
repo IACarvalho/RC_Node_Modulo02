@@ -1,18 +1,12 @@
 import fastify from 'fastify'
-import { knex } from '../config/database'
 import { env } from './env'
+import { transactionController } from './controllers/transactionController'
 
 const app = fastify()
 
 const port = env.PORT
 
-app.get('/', async () => {
-  const transaction = await knex('transactions')
-    .where('amount', 500)
-    .select('*')
-
-  return transaction
-})
+app.register(transactionController)
 
 app.listen({ port }, (err, address) => {
   if (err) {
