@@ -6,10 +6,13 @@ if (!process.env.DB_URL) {
 }
 
 export const config: Knex.Config = {
-  client: 'sqlite3',
-  connection: {
-    filename: env.DB_URL,
-  },
+  client: env.DATABASE_CLIENT,
+  connection:
+    env.DATABASE_CLIENT === 'sqlite'
+      ? {
+          filename: env.DB_URL,
+        }
+      : env.DB_URL,
   useNullAsDefault: true,
   migrations: {
     extension: 'ts',
