@@ -346,4 +346,20 @@ Pode ser usado a função **it** ao invez de **test** deixando assim a leitura m
 ### 10.5 Todo teste deve se bastar
 Todo teste deve **SEMPRE** se excluir de qualqeur contexto, ou seja um teste nnuca deve dempender de outro teste. Se um teste depende de outro eles deveriam ser o mesmo teste.
 
-### 10.6 Criando um banco de dados para testes
+## 11 Fazendo deploy
+### 11.1 Usando tsconfig
+* Primeiro configurar o **tsconfig** e identifique o diretorio base **rootDir** e o diretório de saída **outDir**
+* Depois basta buildar o projeto.
+Esse método é lento, e vai ficar cada vez mais lento conforme o projeto cresce
+
+### 11.2 USando tsup
+* Instale o **tsup**
+```bash
+npm i -D tsup
+```
+* O tsup é uma ferramente que irá fazer o build do projeto
+* Para executar basta chamar o tsup na apsta **src**, criando um script para facilitar
+```json
+"build": "tsup src"
+// para modificar o nome do diretorio de saída
+"build": "tsup -d build"
