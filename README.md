@@ -282,3 +282,68 @@ Cookies såo craidos e enviados por requisições HTTP. Ótimo método para vali
 ```bash
 npm i @fastify/cookie
 ```
+
+## 10. Testes automatizados
+ ### 10.1. Testes unitários
+Testes unitários são testes que testam uma unidade de código, ou seja, uma função, um método, uma classe, etc.
+
+### 10.2. Testes de integração
+Testes de integração são testes que testam a integração entre duas ou mais unidades de código.
+
+### 10.3. Testes E2E
+Testes E2E são testes que testam a aplicação como um todo, ou seja, testam a aplicação como se fosse um usuário.
+
+### 10.4. Criando o primeiro teste
+* Instalando o vitst
+
+```bash
+npm install --save-dev vitest
+```
+* Cria uma pasta para os testes
+* Crie um arquivo te teste com `.spec.ts` como extenção
+* instale o pacote supertest, ele é um pacote que faz requisições HTTP para testar a aplicação
+```bash
+npm install --save-dev supertest @types/supertest
+```
+
+### 10.4.1 beforaAll() beforeEach*(), afterEach() e afterAll()
+
+* beforeAll() -> é uma função que irá execurtar uma única vez antes de todas as outras
+* beforeEach() -> irá ser executada antes de cada funçào
+* afterEach() -> irá executar após cada função
+* afterAll() -> exacutará quando todas as outras forem executadas.
+
+
+No fastify como toda função tende a ser asíncrona é necessário executar uma função antes, caso contrário retornará um erro
+
+```ts
+beforeAll(async () => {
+  await app.ready()
+})
+```
+
+E é interessante fazer uma para encerrar a aplicação ao final, para não ficar ocupando uma porta
+
+```ts
+afterAll( async () => {
+  await app.close()
+})
+```
+
+### 10.4.2 Separando e descrevendo os testes
+Existe o método **describe** que encapsula os testes de uma determinada rota, por exemplo, e deixa mais explícito e de fácil manutenção
+Também posso usar um describe dentro de outro, para, por exemplo, uma rota com varios testes.
+```ts
+describe('Descrição de grupo de testes', () => {
+  // Testes
+  describe('', () => {})
+})
+```
+
+### 10.4.3 Deixando o testes mais semâticos
+Pode ser usado a função **it** ao invez de **test** deixando assim a leitura mais intuitiva e o código mais semâtico
+
+### 10.5 Todo teste deve se bastar
+Todo teste deve **SEMPRE** se excluir de qualqeur contexto, ou seja um teste nnuca deve dempender de outro teste. Se um teste depende de outro eles deveriam ser o mesmo teste.
+
+### 10.6 Criando um banco de dados para testes
